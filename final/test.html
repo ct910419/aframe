@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>救救我啊我救我</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-proxy-event-component/dist/aframe-proxy-event-component.min.js"></script>
+    <script src="scripts/aframe-draw-shader.js"></script>
+    <script src="scripts/aframe-video-player.js"></script>
+    <script src="scripts/aframe-render-order-component.js"></script>
+    <script src="scripts/aframe-change-scene.js"></script>
+    <script src="scripts/aframe-move-to.js"></script>
+    <script src="scripts/aframe-maze.js"></script>
+    <script src="scripts/aframe-attach-to.js"></script>
+</head>
+
+<body>
+    <a-scene>
+        <a-assets>
+            <video id="1" preload="auto" src="./sc/t1.mp4" crossOrigin=""></video>
+            <video id="2" preload="auto" src="./sc/2.mp4" crossOrigin=""></video>
+            <video id="3" preload="auto" src="./sc/3.mp4" crossOrigin=""></video>
+            <video id="4" preload="auto" src="./sc/4.mp4" crossOrigin=""></video>
+            <video id="5" preload="auto" src="./sc/5.mp4" crossOrigin=""></video>
+            <video id="6" preload="auto" src="./sc/6.mp4" crossOrigin=""></video>
+            <video id="7" preload="auto" src="./sc/7.mp4" crossOrigin=""></video>
+            <video id="8" preload="auto" src="./sc/8.mp4" crossOrigin=""></video>
+            <video id="9" preload="auto" src="./sc/9.mp4" crossOrigin=""></video>
+            <video id="10" preload="auto" src="./sc/10.mp4" crossOrigin=""></video>
+            <img id="back" crossorigin="anonymous" src="image/1.jpg"/>
+            <img id="med" crossorigin="anonymous" src="image/3.png"/>
+            <img id="mar" crossorigin="anonymous" src="image/mar1.png"/>
+            <img id="hos" crossorigin="anonymous" src="image/ha.png"/>
+        </a-assets>
+
+        <a-camera>
+            <a-cursor color="#fff" cursor="fuse: true; fuseTimeout: 1000" raycaster="objects: [visible=true] [raycastable=true]"></a-cursor>
+            <a-sky id="fadePanel" render-order="99999" radius="0.3" color="#000" material="transparent: true; opacity: 0.0;"
+                animation__fadeOut="property: material.opacity; startEvents: fadeOut; easing: linear; dur: 500; to: 1.0"
+                animation__fadeIn="property: material.opacity; startEvents: fadeIn; easing: linear; dur: 500; to: 0.0"></a-sky>
+                <a-entity id="hud" position="0 0 -0.9"></a-entity>
+        </a-camera>
+
+        <a-entity id="scene1" scene visible="true">
+            <a-videosphere id="video1" src="#1" video-player="playEvent: play-video; onEndEvent: ended;" rotation="0 -90 0"
+                event-set="_event: play-video; visible: true;"
+                event-set__show-select-btn1="_event: ended; _target: #btn1; raycastable: true; visible: true;">
+            </a-videosphere>
+
+            <a-plane id="btn" fuse-button="color: #E1DBD9; barColor: #918C8A; fuseTimeout: 1000;" width="3" position="0 0 -10"
+                raycastable="true" 
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                proxy-event="event: click; as: play-video; to: #video1;"
+                proxy-event__cap1="event: click; as: startCaption; to: #caption1;">
+                <a-plane draw-text="text:start; color: #4D4B4A; strokeWidth:0;" position="0 0 0.02" ></a-plane>
+            </a-plane>
+            
+            <a-plane id="btn1" draw-text="text:！; color: #fff; strokeWidth:10;" position="-18 5 -7" rotation="0 60 0" scale="2 2 2"
+                visible="false" raycastable="false"
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                change-scene="event: click; to: #scene2; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video2;"
+                proxy-event__cap2="event: click; as: startCaption; to: #caption2;">
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99998">
+            <a-plane id="caption1" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 20.0, 'text': '金孫:疑...怎麼回事?'},
+                        {'time': 23.0, 'text': '金孫:下面那個是...我?'},
+                        {'time': 26.0, 'text': '奶奶:醫生，醫生，我的孫子狀況怎麼樣了?'},
+                        {'time': 32.0, 'text': '金孫:是奶奶的聲音'},
+                        {'time': 35.0, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99997">
+            <a-plane id="caption2" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '醫生:目前病人情況危急'},
+                        {'time': 2.5, 'text': '醫生:需要請您盡快做出決定是否要急救?'},
+                        {'time': 6.0, 'text': '奶奶:救!醫生請你一定要救救我的金孫!!!!!'},
+                        {'time': 9.2, 'text': '醫生:現在病人就算搶救回來，還是很有可能會全身癱瘓'},
+                        {'time': 13.8, 'text': '醫生:請您考慮清楚'},
+                        {'time': 16.0, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene2" scene visible="false">
+            <a-videosphere id="video2" src="#2" video-player="playEvent: play-video; onEndEvent: ended;"
+            event-set__show-select-btn2="_event: ended; _target: #btn2; raycastable: true; visible: true;"
+            event-set__show-select-btn3="_event: ended; _target: #btn3; raycastable: true; visible: true;">
+            </a-videosphere>
+
+            <a-plane id="btn2" fuse-button="color: #E1DBD9; barColor: #918C8A; fuseTimeout: 1000;" width="10" position="-5 0 -5"
+                visible="false" raycastable="false"
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                change-scene="event: click; to: #scene3; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video3;"
+                proxy-event__cap3="event: click; as: startCaption; to: #caption3;">
+                <a-plane draw-text="text:我寧願死，也不要一輩子躺在那; color: #4D4B4A" position="0 0 0.02"></a-plane>
+            </a-plane>
+            
+            <a-plane id="btn3" fuse-button="color: #E1DBD9; barColor: #918C8A; fuseTimeout: 1000;" width="5" position="5 0 -5"
+                visible="false" raycastable="false"
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                change-scene="event: click; to: #scene4; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video4;"
+                proxy-event__cap4="event: click; as: startCaption; to: #caption4;">
+                <a-plane draw-text="text:我想繼續活下去; color: #4D4B4A" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99996">
+            <a-plane id="caption3" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '奶奶:就算讓我養他一輩子'},
+                        {'time': 2.5, 'text': '奶奶:也一定要把他救活!'},
+                        {'time': 4.5, 'text': '奶奶:拜託了醫生!'},
+                        {'time': 6.0, 'text': ''},
+                        {'time': 15.0, 'text': '醫生:我們已經盡力了'},
+                        {'time': 16.8, 'text': '醫生:剩下的就只能等待他醒來'},
+                        {'time': 19.5, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99995">
+            <a-plane id="caption4" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '奶奶:那ㄟ阿餒~我的金孫之前最喜歡運動了'},
+                        {'time': 2.9, 'text': '奶奶:讓他一輩子躺在那裏，他一定會怨我…'},
+                        {'time': 4.9, 'text': '金孫:我不會怨你，我想繼續活下去'},
+                        {'time': 6.0, 'text': '奶奶:讓他好好地走吧…'},
+                        {'time': 7.8, 'text': ''},
+                        {'time': 0.5, 'text': '奶奶:哎呀!金夭壽…'},
+                        {'time': 2.9, 'text': '奶奶:阿你平常騎車這麼快，咖注意ㄟ'},
+                        {'time': 4.9, 'text': '金孫:不會拉，我騎車很小心'},
+                        {'time': 6.0, 'text': '奶奶:啊我哪天被撞了，不要給我做那些有的沒的'},
+                        {'time': 7.8, 'text': '奶奶:就讓我好好去見你阿公齁，阿你勒?'},
+                        {'time': 4.9, 'text': '金孫:青菜拉。我還那麼年輕，想那個幹嘛'},
+                        {'time': 6.0, 'text': '奶奶:還是小心一點啦'},
+                        {'time': 7.8, 'text': '金孫:不跟你說了，我快遲到了!'},
+                        {'time': 10.4, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene3" scene visible="false">
+            <a-videosphere id="video3" src="#3" video-player="playEvent: play-video; onEndEvent: ended;"
+            change-scene="event: ended; to: #scene3_1; fadePanel: #fadePanel;">
+            </a-videosphere>
+        </a-entity>
+
+        <a-entity id="scene4" scene visible="false">
+            <a-videosphere id="video4" src="#4" video-player="playEvent: play-video; onEndEvent: ended;"></a-videosphere>
+        </a-entity>
+
+        <a-entity id="scene3_1" scene visible="false">
+            <a-sky src="back"></a-sky>
+            <a-box id="box1" position="-2 1 -3" raycastable="true" material="src: #med;"
+                change-scene="event: click; to: #scene5; fadePanel: #fadePanel;"
+            ></a-box>
+            <a-box id="box2" position="0 1 -3" raycastable="true" material="src: #mar;"
+                change-scene="event: click; to: #scene6; fadePanel: #fadePanel;"
+            ></a-box>
+            <a-box id="box3" position="2 1 -3" raycastable="true" material="src: #hos;"
+                change-scene="event: click; to: #scene7; fadePanel: #fadePanel;"
+            ></a-box>
+            <a-box id="box4" position="0 -0.5 -3" raycastable="true" material="src: #s;" width="1" height="0.3" depth="0.3"
+                change-scene="event: click; to: #scene8; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video8;"
+                proxy-event__cap5="event: click; as: startCaption; to: #caption5;">
+            </a-box>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99994">
+            <a-plane id="caption5" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '奶奶:醫生醫生!我的孫子怎麼了!'},
+                        {'time': 3.1, 'text': '醫生:快點把他推進手術室!'},
+                        {'time': 5.3, 'text': '醫生:患者的情況持續惡化'},
+                        {'time': 7.5, 'text': '醫生:需要請您考慮是否繼續進行積極治療'},
+                        {'time': 11.1, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene5" scene visible="false">
+            <a-videosphere id="video5" src="#5" video-player="playEvent: play-video; onEndEvent: ended;" rotation="0 -90 0"
+                event-set="_event: play-video; visible: true;"
+                change-scene="event: ended; to: #scene3_1; fadePanel: #fadePanel;">
+            </a-videosphere>
+            <a-plane id="start1" fuse-button="color: #15031b; barColor: #d24; fuseTimeout: 1000;" width="3" position="0 0 -10"
+                raycastable="true" 
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                proxy-event="event: click; as: play-video; to: #video5;">
+                <a-plane draw-text="text:!; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene6" scene visible="false">
+            <a-videosphere id="video6" src="#6" video-player="playEvent: play-video; onEndEvent: ended;" rotation="0 -90 0"
+                event-set="_event: play-video; visible: true;"
+                change-scene="event: ended; to: #scene3_1; fadePanel: #fadePanel;">
+            </a-videosphere>
+            <a-plane id="start2" fuse-button="color: #15031b; barColor: #d24; fuseTimeout: 1000;" width="3" position="0 0 -10"
+                raycastable="true" 
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                proxy-event="event: click; as: play-video; to: #video6;">
+                <a-plane draw-text="text:!; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+
+        <a-entity id="scene7" scene visible="false">
+            <a-videosphere id="video7" src="#7" video-player="playEvent: play-video; onEndEvent: ended;" rotation="0 -90 0"
+                event-set="_event: play-video; visible: true;"
+                change-scene="event: ended; to: #scene3_1; fadePanel: #fadePanel;">
+            </a-videosphere>
+            <a-plane id="start3" fuse-button="color: #15031b; barColor: #d24; fuseTimeout: 1000;" width="3" position="0 0 -10"
+                raycastable="true" 
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                proxy-event="event: click; as: play-video; to: #video7;">
+                <a-plane draw-text="text:!; color: #fff" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+        
+        <a-entity id="scene8" scene visible="false">
+            <a-videosphere id="video8" src="#8" video-player="playEvent: play-video; onEndEvent: ended;"
+            event-set__show-select-btn4="_event: ended; _target: #btn4; raycastable: true; visible: true;"
+            event-set__show-select-btn5="_event: ended; _target: #btn5; raycastable: true; visible: true;">
+            </a-videosphere>
+
+            <a-plane id="btn4" fuse-button="color: #E1DBD9; barColor: #918C8A; fuseTimeout: 1000;" width="7" position="-5 0 -5"
+                visible="false" raycastable="false"
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                change-scene="event: click; to: #scene9; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video9;"
+                proxy-event__cap6="event: click; as: startCaption; to: #caption6;">
+                <a-plane draw-text="text:拜託!再給我一點時間!; color: #4D4B4A" position="0 0 0.02"></a-plane>
+            </a-plane>
+            
+            <a-plane id="btn5" fuse-button="color: #E1DBD9; barColor: #918C8A; fuseTimeout: 1000;" width="7" position="5 0 -5"
+                visible="false" raycastable="false"
+                event-set__hide="_event: click; raycastable: false; visible: false; _delay: 300;"
+                change-scene="event: click; to: #scene10; fadePanel: #fadePanel; onChangeEvent: play-video;"
+                proxy-event="event: play-video; to: #video10;"
+                proxy-event__cap7="event: click; as: startCaption; to: #caption7;">
+                <a-plane draw-text="text:我受夠了!讓我去死!; color: #4D4B4A" position="0 0 0.02"></a-plane>
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99993">
+            <a-plane id="caption6" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '奶奶:對不起阿金孫…'},
+                        {'time': 2.1, 'text': '奶奶:奶奶身體沒有辦法繼續保護你了'},
+                        {'time': 5.3, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+
+        <a-entity attach-to="#hud" render-order="99992">
+            <a-plane id="caption7" scale="0.1 0.1 0.1" position="0 -0.2 0" caption="
+                    color: #fff; 
+                    strokeWidth: 3;
+                    timeline: [
+                        {'time': 0.5, 'text': '奶奶:我孫子肯定會起來的…'},
+                        {'time': 2.7, 'text': '奶奶:要走也是我先走'},
+                        {'time': 4.5, 'text': ''},
+                        {'time': 7.5, 'text': '路人甲:跟你說喔'},
+                        {'time': 8.9, 'text': '路人甲:之前那個在這邊工作的老奶奶走了ㄟ'},
+                        {'time': 12.7, 'text': '路人乙:蝦米，價你恐怖!'},
+                        {'time': 14.5, 'text': '路人甲:嘿阿，阿他那個不能動的孫子不知道怎麼辦'},
+                        {'time': 18.7, 'text': '路人乙:嘖…口憐阿…'},
+                        {'time': 20.0, 'text': ''}
+                    ];
+                    startEvent: startCaption;
+                "
+            >
+            </a-plane>
+        </a-entity>
+        
+        <a-entity id="scene9" scene visible="false">
+            <a-videosphere id="video9" src="#9" video-player="playEvent: play-video; onEndEvent: ended;"></a-videosphere>
+        </a-entity>
+
+        <a-entity id="scene10" scene visible="false">
+            <a-videosphere id="video10" src="#10" video-player="playEvent: play-video; onEndEvent: ended;"></a-videosphere>
+        </a-entity>
+
+    </a-scene>
+</body>
+
+</html>
